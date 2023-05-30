@@ -34,5 +34,5 @@ Route::controller(ProfileController::class)->group(function() {
 });
 
 Route::controller(ProfileController::class)->group(function() {
-    Route::get('admin/news/edit', 'edit');
+    Route::get('admin/profile/edit', 'edit');
 });
