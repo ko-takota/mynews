@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\NewsController;
+use App\Http\Controllers\Admin\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,11 +19,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-use App\Http\Controllers\Admin\NewsController;
 Route::controller(NewsController::class)->prefix('admin')->group(function() {
-    Route::get('news/create', 'add');
+    Route::get('news/create', 'add')->middleware('auth');
 });
-
 
 //課題１
 Route::controller(AAAController::class)->group(function() {
@@ -29,10 +29,13 @@ Route::controller(AAAController::class)->group(function() {
 });
 
 //課題２
-Route::controller(ProfileController::class)->group(function() {
-    Route::get('admin/profile/create', 'add');
+Route::controller(ProfileController::class)->prefix('admin')->group(function() {
+    Route::get('profile/create', 'add');
+    Route::get('profile/edit', 'edit');
 });
 
-Route::controller(ProfileController::class)->group(function() {
-    Route::get('admin/profile/edit', 'edit');
-});
+
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
