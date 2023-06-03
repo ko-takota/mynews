@@ -1,8 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\NewsController;
-use App\Http\Controllers\Admin\ProfileController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -19,9 +18,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+use App\Http\Controllers\Admin\NewsController;
 Route::controller(NewsController::class)->prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::get('news/create', 'add')->name('news.add');
     Route::post('news/create', 'create')->name('news.create');
+    Route::get('news' , 'index')->name('news.index');
+    Route::get('news/edit', 'edit')->name('news.edit');
+    Route::post('news/edit', 'update')->name('news.update');
+    Route::get('news/delete', 'delete')->name('news.delete');
 
 });
 
@@ -31,14 +35,20 @@ Route::controller(NewsController::class)->prefix('admin')->name('admin.')->middl
 // });
 
 //課題２
-Route::controller(ProfileController::class)->prefix('admin')->group(function() {
-    Route::get('profile/create', 'add')->middleware('auth');
-    Route::get('profile/edit', 'edit')->middleware('auth');
-});
+// Route::controller(ProfileController::class)->prefix('admin')->group(function() {
+//     Route::get('profile/create', 'add')->middleware('auth');
+//     Route::get('profile/edit', 'edit')->middleware('auth');
+// });
 
+use App\Http\Controllers\Admin\ProfileController;
 Route::controller(ProfileController::class)->prefix('admin')->name('admin.')->middleware('auth')->group(function() {
+     Route::get('profile/create', 'add')->name('profile.add');
      Route::post('profile/create', 'create')->name('profile.create');
-     Route::post('profile/edit', 'update')->name('profile.edit');
+     //Route::post('profile/edit', 'update')->name('profile.edit');
+     Route::get('profile', 'index')->name('profile.index');
+     Route::get('profile/edit', 'edit')->name('profile.edit');
+     Route::post('profile/edit', 'update')->name('profile.update');
+     Route::get('profile/delete', 'delete')->name('profile.delete');
 });
 
 

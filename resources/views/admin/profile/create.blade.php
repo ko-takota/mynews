@@ -1,7 +1,5 @@
 {{-- layouts/profile.blade.phpを読み込む --}}
 @extends('layouts.profile')
-
-
 {{-- admin.blade.phpの@yield('title')に'ニュースの新規作成'を埋め込む --}}
 @section('title', '課題の作成')
 
@@ -11,7 +9,7 @@
         <div class="row">
             <div class="col-md-8 mx-auto">
                 <h2>【PHP/Laravel】課題</h2>
-                 <form action="{{ route('admin.profile.create') }}" method="post" enctype="multipart/form-data">
+                <form action="{{ route('admin.profile.create') }}" method="post" enctype="multipart/form-data">
 
                     @if (count($errors) > 0)
                         <ul>

@@ -13,6 +13,7 @@ class ProfileController extends Controller
         return view('admin.profile.create');
     }
 
+
     public function create(Request $request)
     {
         $this->validate($request, Profile::$rules);
@@ -24,19 +25,72 @@ class ProfileController extends Controller
         unset($form['_token']);
         
         // データベースに保存する
-        $news->fill($form);
-        $news->save();
+        $profile->fill($form);
+        $profile->save();
+        
+        
         
         return redirect('admin/profile/create');
     }
-
-    public function edit()
+    
+    
+    
+    // index Actionを追加
+    public function index(Request $request)
     {
-        return view('admin.profile.edit');
+        $cond_name = $request->cond_name;
+        if ($cond_name != '') {
+            // 検索されたら検索結果を取得する
+            $posts = Profile::where('name', $cond_name)->get();
+        } else {
+            // それ以外はすべてのプロフィールを取得する
+            $posts = Profile::all();
+        }
+        return view('admin.profile.index', ['posts' => $posts, 'cond_name' => $cond_name]);
     }
-
-    public function update()
+    
+    
+    
+    
+    // edit 編集画面処理
+    public function edit(Request $request)
     {
-        return redirect('admin/profile/edit');
+        // Profile Modelからデータを取得する
+        $profile = Profile::find($request->id);
+        if (empty($profile)) {
+            abort(404);
+        }
+        return view('admin.profile.edit', ['profile_form' => $profile]);
+    }
+    // updata 編集画面から送信されたフォームデータを処理
+    public function update(Request $request)
+    {
+        // Validationをかける
+        $this->validate($request, Profile::$rules);
+        // Profile Modelからデータを取得する
+        $profile = Profile::find($request->id);
+        // 送信されてきたフォームデータを格納する
+        $profile_form = $request->all();
+        
+        unset($profile_form['_token']);
+        
+        // 該当するデータを上書きして保存する
+        $profile->fill($profile_form)->save();
+        
+        return redirect('admin/profile');
+    }
+    
+    
+    
+    //delere 削除処理
+     public function delete(Request $request)
+    {
+        // 該当するNews Modelを取得
+        $profile = Profile::find($request->id);
+
+        // 削除する
+        $profile->delete();
+
+        return redirect('admin/profile/');
     }
 }
