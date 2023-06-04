@@ -6,6 +6,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Profile;
 
+use App\Models\ProHistory;
+
+use Carbon\Carbon;
+
+
 class ProfileController extends Controller
 {
     public function add()
@@ -76,6 +81,11 @@ class ProfileController extends Controller
         
         // 該当するデータを上書きして保存する
         $profile->fill($profile_form)->save();
+        
+        $pro_history = new ProHistory();
+        $pro_history->profile_id = $profile->id;
+        $pro_history->edited_at = Carbon::now();
+        $pro_history->save();
         
         return redirect('admin/profile');
     }

@@ -4,8 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+// 下記1行を追記することで、News Modelが扱えるようになる
+use App\Models\News; 
+// History Modelの使用を宣言するため以下を追記
+use App\Models\History;
 
-use App\Models\News; // 以下の1行を追記することで、News Modelが扱えるようになる
+use Carbon\Carbon;
 
 
 class NewsController extends Controller
@@ -86,7 +90,7 @@ class NewsController extends Controller
         $news = News::find($request->id);
         // 送信されてきたフォームデータを格納する
         $news_form = $request->all();
-        
+
         if ($request->remove == 'true') {
             $news_form['image_path'] = null;
         } elseif ($request->file('image')) {
@@ -102,6 +106,12 @@ class NewsController extends Controller
 
         // 該当するデータを上書きして保存する
         $news->fill($news_form)->save();
+
+        // 以下を追記
+        $history = new History();
+        $history->news_id = $news->id;
+        $history->edited_at = Carbon::now();
+        $history->save();
 
         return redirect('admin/news');
     }
