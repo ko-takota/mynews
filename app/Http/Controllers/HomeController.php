@@ -23,6 +23,7 @@ class HomeController extends Controller
      */
     public function index()
     {
+        //dd('homeのindexが動いた');
         return view('home');
     }
 }
